@@ -1,6 +1,12 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 export default function Main() {
+  const [address, setAddress] = useState([]);
+
+  axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+  axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+
   let conversionsCards = [];
   for (let i = 0; i < 50; i++) {
     conversionsCards.push(
@@ -33,7 +39,18 @@ export default function Main() {
           {conversionsCards}
         </div>
       </div>
-      <div className="w-3/5  border border-l border-r border-gray-300">center</div>
+      <div className="w-3/5  border border-l border-r border-gray-300">
+        <button onClick={async () => {
+          let res = await axios.get('http://localhost:8080/https://zipcloud.ibsnet.co.jp/api/search?zipcode=1410022');
+          console.log(res.data.results[0]);
+          setAddress(res.data.results[0])
+        }}>
+          ボタン！
+          </button>
+        <p>
+          {JSON.stringify(address)}
+        </p>
+      </div>
       <div className="w-1/5 bg-gray-200">right</div>
     </div>
   )
