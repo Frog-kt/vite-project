@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
+let tv: string = "";
+
 export default function Main() {
   const [address, setAddress] = useState([]);
+  const [addressNum, setAddressNum]: any = useState();
 
   axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
   axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
@@ -40,12 +43,17 @@ export default function Main() {
         </div>
       </div>
       <div className="w-3/5  border border-l border-r border-gray-300">
-        <button onClick={async () => {
-          let res = await axios.get('http://localhost:8080/https://zipcloud.ibsnet.co.jp/api/search?zipcode=1410022');
-          console.log(res.data.results[0]);
+        <input className="border-2 mt-4 ml-4" type="text" name="address" onChange={(e) => {
+          const target = e.target;
+          tv = target.value;
+          setAddressNum(tv);
+        }} />
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4 mt-4 mb-4" onClick={async () => {
+          let address = `http://localhost:8080/https://zipcloud.ibsnet.co.jp/api/search?zipcode=${addressNum}`
+          let res = await axios.get(address);
           setAddress(res.data.results[0])
         }}>
-          ボタン！
+          住所検索
           </button>
         <p>
           {JSON.stringify(address)}
